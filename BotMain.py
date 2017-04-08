@@ -18,9 +18,12 @@ async def on_ready():
     await bot.change_presence(game=discord.Game(name="Being a useless bot"))
 
 
-@bot.command()
-async def load(extension_name: str):
+@bot.command(pass_context=True)
+async def load(ctx, extension_name: str):
     """Loads an extension."""
+    if not is_owner(ctx.message.author):
+        await bot.say("You must be the bots owner to do this.")
+        return
     try:
         bot.load_extension(extension_name)
     except (AttributeError, ImportError) as e:
@@ -29,11 +32,22 @@ async def load(extension_name: str):
     await bot.say("{} loaded.".format(extension_name))
 
 
-@bot.command()
-async def unload(extension_name: str):
+@bot.command(pass_context=True)
+async def unload(ctx, extension_name: str):
     """Unloads an extension."""
+    if not is_owner(ctx.message.author):
+        await bot.say("You must be the bots owner to do this.")
+        return
     bot.unload_extension(extension_name)
     await bot.say("{} unloaded.".format(extension_name))
+
+
+def is_owner(author):
+    for owner in config.owner_username:
+        p = owner.split("#")
+        if p[0] == author.name and p[1] == author.discriminator:
+            return True
+    return False
 
 
 if __name__ == "__main__":

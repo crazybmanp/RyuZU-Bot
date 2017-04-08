@@ -8,7 +8,7 @@ class Admin:
     @commands.command(pass_context=True)
     async def purge(self, ctx, messages=100):
         """Purges all (100 by default) previous messages from chat."""
-        if not ctx.message.author.permissions_in(ctx.message.channel).administrator:
+        if not ctx.message.author.permissions_in(ctx.message.channel).manage_messages:
             await self.bot.say("Only Admins are allowed to purge the chat.")
             return
         await self.bot.say("purging {} messages".format(messages))
