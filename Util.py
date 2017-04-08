@@ -12,7 +12,7 @@ class Util():
         """Rolls a dice in NdN format."""
         try:
             rolls, limit = map(int, dice.split('d'))
-        except Exception:
+        except ValueError:
             await self.bot.say('Format has to be in NdN!')
             return
 
@@ -23,6 +23,7 @@ class Util():
     async def choose(self, *choices: str):
         """Chooses between multiple choices."""
         await self.bot.say(random.choice(choices))
+
 
 def setup(bot):
     bot.add_cog(Util(bot))
