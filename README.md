@@ -1,2 +1,2 @@
 # RyuZU-Bot
-A discord bot built on molecularity with cogs.
+A discord bot built on modularity with cogs.
