@@ -9,6 +9,10 @@ class Memes:
         self.bot = bot
 
     @commands.command()
+    async def bass(self):
+        await self.bot.say("THE FUCKIN :fish:BASS:fish: IS FUCKIN **RAW**! https://puu.sh/kPpgM.webm")
+
+    @commands.command()
     async def brainpower(self):
         options = [
             "O-oooooooooo AAAAE-A-A-I-A-U- JO-oooooooooooo AAE-O-A-A-U-U-A- E-eee-ee-eee AAAAE-A-E-I-E-A- JO-ooo-oo-oo-oo EEEEO-A-AAA-AAAA",
