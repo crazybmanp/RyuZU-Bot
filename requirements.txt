@@ -1,0 +1,7 @@
+discord.py==0.16.7
+html2text==2016.9.19
+overwatch-api==0.4
+PyNaCl==1.1.2
+requests==2.13.0
+tinydb==3.2.2
+youtube-dl==2017.4.3
