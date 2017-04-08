@@ -20,9 +20,11 @@ class Admin:
         """Cleans all posts from this bot and any commands."""
         await self.bot.say("Cleaning...")
         message = ctx.message
-        deleted = await self.bot.purge_from(message.channel, limit=messages, check=self.is_me)
-        deleted += await self.bot.purge_from(message.channel, limit=messages, check=self.is_command)
+        deleted = await self.bot.purge_from(message.channel, limit=messages, check=self.is_me_or_command)
         await self.bot.say('Deleted {} message(s)'.format(len(deleted)))
+
+    def is_me_or_command(self, m):
+        return self.is_me(m) or self.is_command(m)
 
     def is_me(self, m):
         return m.author == self.bot.user
