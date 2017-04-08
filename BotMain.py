@@ -1,5 +1,3 @@
-import random
-
 import discord
 from discord.ext import commands
 
@@ -20,9 +18,12 @@ async def on_ready():
     await bot.change_presence(game=discord.Game(name="Being a useless bot"))
 
 
-@bot.command()
-async def load(extension_name: str):
+@bot.command(pass_context=True)
+async def load(ctx, extension_name: str):
     """Loads an extension."""
+    if not is_owner(ctx.message.author):
+        await bot.say("You must be the bots owner to do this.")
+        return
     try:
         bot.load_extension(extension_name)
     except (AttributeError, ImportError) as e:
@@ -31,59 +32,22 @@ async def load(extension_name: str):
     await bot.say("{} loaded.".format(extension_name))
 
 
-@bot.command()
-async def unload(extension_name: str):
+@bot.command(pass_context=True)
+async def unload(ctx, extension_name: str):
     """Unloads an extension."""
+    if not is_owner(ctx.message.author):
+        await bot.say("You must be the bots owner to do this.")
+        return
     bot.unload_extension(extension_name)
     await bot.say("{} unloaded.".format(extension_name))
 
 
-@bot.command()
-async def roll(dice: str):
-    """Rolls a dice in NdN format."""
-    try:
-        rolls, limit = map(int, dice.split('d'))
-    except Exception:
-        await bot.say('Format has to be in NdN!')
-        return
-
-    result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
-    await bot.say(result)
-
-
-@bot.command(description='For when you wanna settle the score some other way')
-async def choose(*choices: str):
-    """Chooses between multiple choices."""
-    await bot.say(random.choice(choices))
-
-
-@bot.command(pass_context=True)
-async def purge(ctx, messages=100):
-    """Purges all (100 by default) previous messages from chat."""
-    if not ctx.message.author.permissions_in(ctx.message.channel).administrator:
-        await bot.say("Only Admins are allowed to purge the chat.")
-        return
-    await bot.say("purging {} messages".format(messages))
-    messages += 2  # account for command and feedback
-    await bot.purge_from(ctx.message.channel, limit=messages)
-
-
-@bot.command(pass_context=True)
-async def clean(ctx, messages=100):
-    """Cleans all posts from this bot and any commands."""
-    await bot.say("Cleaning...")
-    message = ctx.message
-    deleted = await bot.purge_from(message.channel, limit=messages, check=is_me)
-    deleted += await bot.purge_from(message.channel, limit=messages, check=is_command)
-    await bot.say('Deleted {} message(s)'.format(len(deleted)))
-
-
-def is_me(m):
-    return m.author == bot.user
-
-
-def is_command(m):
-    return m.content.startswith('!')
+def is_owner(author):
+    for owner in config.owner_username:
+        p = owner.split("#")
+        if p[0] == author.name and p[1] == author.discriminator:
+            return True
+    return False
 
 
 if __name__ == "__main__":
