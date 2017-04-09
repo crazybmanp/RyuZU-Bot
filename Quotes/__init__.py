@@ -1,9 +1,11 @@
+import random
+
 import discord
 from discord.ext import commands
 from tinydb import TinyDB, Query
 
 
-class Quotes():
+class Quotes:
     db = TinyDB('Quote-servers.json')
     server_db = {}
 
@@ -42,11 +44,7 @@ class Quotes():
         await self.bot.say("Removed quote #{}".format(quotenum))
 
     @commands.command(pass_context=True)
-    async def editquote(self, ctx, quotenum):
-        return
-
-    @commands.command(pass_context=True)
-    async def listquotes(self, ctx):
+    async def listquotes(self, ctx, category=None):
         sdb = self.server_db[ctx.message.server.id]
         quotes = sdb.all()
         line = ""
@@ -61,22 +59,29 @@ class Quotes():
             await self.bot.say(m)
 
     @commands.command(pass_context=True)
-    async def quote(self, ctx, param):
+    async def quote(self, ctx, param=None):
         """Gives you a quote either randomly, or given a category or quote number"""
+        sdb = self.server_db[ctx.message.server.id]
+        q = Query()
         try:
             qnum = int(param)
-        except ValueError:
-            await self.bot.say("quote category: {}".format(param))
+        except (ValueError, TypeError):
+            l = sdb.search(q.category == param)
+            if len(l) < 1:
+                await self.bot.say("That category does not exist")
+                return
+            quote = random.choice(l)
+            await self.SayQuote(quote.eid, quote)
             return
 
-        await self.bot.say("quote number: {}".format(qnum))
-        sdb = self.server_db[ctx.message.server.id]
         quote = sdb.get(eid=qnum)
+        await self.SayQuote(qnum, quote)
+
+    async def SayQuote(self, qnum, quote):
         if quote["category"] is None:
             await self.bot.say("{}:\"{}\"".format(qnum, quote["quote"]))
         else:
             await self.bot.say("{}({}):\"{}\"".format(qnum, quote["category"], quote["quote"]))
-
 
 
 def setup(bot):
