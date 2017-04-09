@@ -4,7 +4,7 @@ from discord.ext import commands
 import config
 
 description = 'A possibly useless bot.'
-bot = commands.Bot(command_prefix='!', description=description)
+bot = commands.Bot(command_prefix=config.command_string, description=description)
 core_cogs = ["Admin", "Util"]
 
 @bot.event
