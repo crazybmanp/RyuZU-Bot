@@ -29,11 +29,7 @@ class Quotes:
     @commands.group(pass_context=True)
     async def quote(self, ctx):
         if ctx.invoked_subcommand is None:
-            sdb = self.server_db[ctx.message.server.id]
-            q = Query()
-            l = sdb.search(q.category == None)
-            quote = random.choice(l)
-            await self.SayQuote(quote.eid, quote)
+            await self.bot.say("Please use sub-commands: give, list, add, or delete.")
 
     @quote.command(pass_context=True)
     async def give(self, ctx, param=None):
@@ -85,7 +81,8 @@ class Quotes:
         :category: The [Optional] category to list quotes from.
         """
         sdb = self.server_db[ctx.message.server.id]
-        quotes = sdb.all()
+        q=Query()
+        quotes = sdb.search(q.category == category)
         line = ""
         for quote in quotes:
             qnum = quote.eid
