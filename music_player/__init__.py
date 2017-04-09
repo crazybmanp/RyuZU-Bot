@@ -65,6 +65,7 @@ class VoiceState:
 
 
 class MusicPlayer:
+    """Type !help music for a list of subcommands"""
     def __init__(self, bot):
         self.bot = bot
         self.channel = None
