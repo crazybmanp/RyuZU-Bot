@@ -1,4 +1,5 @@
 import asyncio
+import math
 
 import discord
 from discord.ext import commands
@@ -66,6 +67,7 @@ class VoiceState:
 class MusicPlayer:
     def __init__(self, bot):
         self.bot = bot
+        self.channel = None
         self.voice_states = {}
 
     def get_voice_state(self, server):
@@ -95,7 +97,7 @@ class MusicPlayer:
         if ctx.invoked_subcommand is None:
             pass
 
-    @music.command(name="j", pass_context=True)
+    @music.command(name="join", pass_context=True)
     async def join(self, ctx):
         """The bot joins your current voice channel"""
         target = ctx.message.author.voice_channel
@@ -109,7 +111,7 @@ class MusicPlayer:
             state.voice = await self.bot.join_voice_channel(target)
         else:
             await state.voice.move_to(target)
-
+        self.channel = ctx.message.author.voice.voice_channel
         return True
 
     @music.command(name="playlist", pass_context=True)
@@ -150,7 +152,37 @@ class MusicPlayer:
             await self.bot.say(entry.video_info)
             await state.songs.put(entry)
 
-    @music.command(name="s", pass_context=True)
+    @music.command(name="skip", pass_context=True)
+    async def vote_skip(self, ctx):
+        """Vote to skip the current song."""
+        member_count = len(self.channel.voice_members) - 1  # total number of members in the channel, minus the bot
+        state = self.get_voice_state(ctx.message.server)
+
+        if member_count == 2 or member_count == 1:
+            vote_req = 1
+        else:
+            vote_req = math.floor(member_count / 2)
+
+        if not state.is_playing():
+            await self.bot.say('Not playing any music right now...')
+            return
+
+        voter = ctx.message.author
+        if voter == state.current.requester:
+            await self.bot.say('Requester requested skipping song...')
+            state.skip()
+        elif voter.id not in state.skip_votes:
+            state.skip_votes.add(voter.id)
+            total_votes = len(state.skip_votes)
+            if total_votes >= vote_req:
+                await self.bot.say('Skip vote passed, skipping song...')
+                state.skip()
+            else:
+                await self.bot.say('Skip vote added, currently at [{}/{}]'.format(total_votes, vote_req))
+        else:
+            await self.bot.say('You have already voted to skip this song.')
+
+    @music.command(name="stop", pass_context=True)
     async def stop(self, ctx):
         """Stops playing audio and leaves the voice channel. This also clears the queue."""
         server = ctx.message.server
@@ -167,7 +199,7 @@ class MusicPlayer:
         except:
             pass
 
-    @music.command(name="v", pass_context=True)
+    @music.command(name="volume", pass_context=True)
     async def volume(self, ctx, value: int):
         """Sets the volume of the currently playing song."""
 
