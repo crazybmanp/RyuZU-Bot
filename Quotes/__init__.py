@@ -99,6 +99,24 @@ class Quotes:
         for m in msgs:
             await self.bot.say(m)
 
+    @quote.command(pass_context=True)
+    async def categories(self, ctx):
+        """
+        Lists all quote categories.
+        """
+        sdb = self.server_db[ctx.message.server.id]
+        quotes = sdb.all()
+        categories = []
+        for quote in quotes:
+            if quote["category"] not in categories:
+                categories.append(quote["category"])
+
+        line = "Categories: \r\n"
+        for c in categories:
+            line += "\r\n{}".format(c)
+        await self.bot.say(line)
+
+
     async def SayQuote(self, qnum, quote):
         if quote["category"] is None:
             await self.bot.say("{}:\"{}\"".format(qnum, quote["quote"]))
