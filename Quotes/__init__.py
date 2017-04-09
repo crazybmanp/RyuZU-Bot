@@ -26,50 +26,17 @@ class Quotes:
             print("mounting {}'s DB".format(server.name))
             self.server_db[server.id] = TinyDB(r[0]['dbFile'])
 
-    @commands.command(pass_context=True)
-    async def addquote(self, ctx, quote, category=None):
-        """ adds a quote to the database
-        :quote: The quote to add, wrap it in quotes
-        :category: an optional category to place the quote under.
-        """
-        sdb = self.server_db[ctx.message.server.id]
-        q = Query()
-        if len(sdb.search(q.quote == quote)) > 0:
-            await self.bot.say("\"{}\" is already a quote.".format(quote))
-            return
-        sdb.insert({'quote': quote, 'category': category})
-        qnum = 0
-        await self.bot.say("Added quote {}({}):\"{}\"".format(qnum, category, quote))
+    @commands.group(pass_context=True)
+    async def quote(self, ctx):
+        if ctx.invoked_subcommand is None:
+            sdb = self.server_db[ctx.message.server.id]
+            q = Query()
+            l = sdb.search(q.category == None)
+            quote = random.choice(l)
+            await self.SayQuote(quote.eid, quote)
 
-    @commands.command(pass_context=True)
-    async def deleteqote(self, ctx, quotenum):
-        """Deletes the quote at the given quote index.
-        :quotenum: The number of the quote to be deleted
-        """
-        sdb = self.server_db[ctx.message.server.id]
-        sdb.remove(eid=quotenum)
-        await self.bot.say("Removed quote #{}".format(quotenum))
-
-    @commands.command(pass_context=True)
-    async def listquotes(self, ctx, category=None):
-        """Lists all quotes or all quotes of a given category
-        :category: The [Optional] category to list quotes from.
-        """
-        sdb = self.server_db[ctx.message.server.id]
-        quotes = sdb.all()
-        line = ""
-        for quote in quotes:
-            qnum = quote.eid
-            if quote["category"] is None:
-                line += "{}:`{}`\r\n".format(qnum, quote["quote"])
-            else:
-                line += "{}({}):`{}`\r\n".format(qnum, quote["category"], quote["quote"])
-        msgs = [line[i:i + 2000] for i in range(0, len(line), 2000)]
-        for m in msgs:
-            await self.bot.say(m)
-
-    @commands.command(pass_context=True)
-    async def quote(self, ctx, param=None):
+    @quote.command(pass_context=True)
+    async def give(self, ctx, param=None):
         """Gives you a quote either randomly, or given a category or quote number
         :param: Either the quote number to quote, or a category to grab a quote randomly from.
         """
@@ -88,6 +55,49 @@ class Quotes:
 
         quote = sdb.get(eid=qnum)
         await self.SayQuote(qnum, quote)
+
+
+    @quote.command(pass_context=True)
+    async def add(self, ctx, quote, category=None):
+        """ adds a quote to the database
+        :quote: The quote to add, wrap it in quotes
+        :category: an optional category to place the quote under.
+        """
+        sdb = self.server_db[ctx.message.server.id]
+        q = Query()
+        if len(sdb.search(q.quote == quote)) > 0:
+            await self.bot.say("\"{}\" is already a quote.".format(quote))
+            return
+        sdb.insert({'quote': quote, 'category': category})
+        qnum = 0
+        await self.bot.say("Added quote {}({}):\"{}\"".format(qnum, category, quote))
+
+    @quote.command(pass_context=True)
+    async def delete(self, ctx, quotenum):
+        """Deletes the quote at the given quote index.
+        :quotenum: The number of the quote to be deleted
+        """
+        sdb = self.server_db[ctx.message.server.id]
+        sdb.remove(eid=quotenum)
+        await self.bot.say("Removed quote #{}".format(quotenum))
+
+    @quote.command(pass_context=True)
+    async def list(self, ctx, category=None):
+        """Lists all quotes or all quotes of a given category
+        :category: The [Optional] category to list quotes from.
+        """
+        sdb = self.server_db[ctx.message.server.id]
+        quotes = sdb.all()
+        line = ""
+        for quote in quotes:
+            qnum = quote.eid
+            if quote["category"] is None:
+                line += "{}:`{}`\r\n".format(qnum, quote["quote"])
+            else:
+                line += "{}({}):`{}`\r\n".format(qnum, quote["category"], quote["quote"])
+        msgs = [line[i:i + 2000] for i in range(0, len(line), 2000)]
+        for m in msgs:
+            await self.bot.say(m)
 
     async def SayQuote(self, qnum, quote):
         if quote["category"] is None:
