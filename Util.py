@@ -31,6 +31,11 @@ class Util():
             return
         await self.bot.say(random.choice(choices))
 
+    @commands.command()
+    async def ping(self):
+        """Gives a pong message as quickly as it can."""
+        await self.bot.say("PONG!")
+
 
 def setup(bot):
     bot.add_cog(Util(bot))

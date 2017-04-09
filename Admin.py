@@ -23,6 +23,16 @@ class Admin:
         deleted = await self.bot.purge_from(message.channel, limit=messages, check=self.is_me_or_command)
         await self.bot.say('Deleted {} message(s)'.format(len(deleted)))
 
+    @commands.command(pass_context=True)
+    async def say(self, ctx):
+        """Purges all (100 by default) previous messages from chat."""
+        await self.bot.delete_message(ctx.message)
+        await self.bot.send_typing(ctx.message.channel)
+        if not ctx.message.author.permissions_in(ctx.message.channel).manage_messages:
+            await self.bot.say("Only Admins are allowed to purge the chat.")
+            return
+        await self.bot.say(ctx.message.content[5:])
+
     def is_me_or_command(self, m):
         return self.is_me(m) or self.is_command(m)
 
