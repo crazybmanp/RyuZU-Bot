@@ -12,8 +12,7 @@ except FileNotFoundError:
     print("You need to create a settings file!")
     exit()
 
-description = 'A possibly useless bot.'
-bot = CustomBot(description, settings)
+bot = CustomBot(settings)
 core_cogs = ["Admin", "Util"]
 
 
