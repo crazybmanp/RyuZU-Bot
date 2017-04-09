@@ -59,7 +59,7 @@ if __name__ == "__main__":
             exc = '{}: {}'.format(type(e).__name__, e)
             print('Failed to load Core Cog: {}, we will now shut down\n{}'.format(extension, exc))
             exit()
-    print("Loading Extension cogs")
+    print("Loading Extension cogs...")
     for extension in config.startup_extensions:
         try:
             bot.load_extension(extension)
