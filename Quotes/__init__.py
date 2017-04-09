@@ -71,6 +71,9 @@ class Quotes:
         """Deletes the quote at the given quote index.
         :quotenum: The number of the quote to be deleted
         """
+        if not ctx.message.author.permissions_in(ctx.message.channel).manage_messages:
+            await self.bot.say("Only Admins are allowed to delete quotes.")
+            return
         sdb = self.server_db[ctx.message.server.id]
         sdb.remove(eid=quotenum)
         await self.bot.say("Removed quote #{}".format(quotenum))
@@ -83,6 +86,8 @@ class Quotes:
         sdb = self.server_db[ctx.message.server.id]
         q=Query()
         quotes = sdb.search(q.category == category)
+        if len(quotes) < 1:
+            await self.bot.say("No quotes found, are you sure you have the right category?")
         line = ""
         for quote in quotes:
             qnum = quote.eid
