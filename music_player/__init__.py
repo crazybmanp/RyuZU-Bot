@@ -1,10 +1,11 @@
 import asyncio
 import math
+import platform
 
 import discord
 from discord.ext import commands
 
-if not discord.opus.is_loaded():
+if not discord.opus.is_loaded() and platform.system() == "Windows":
     discord.opus.load_opus('opus')
 
 
