@@ -28,6 +28,10 @@ class Quotes:
 
     @commands.command(pass_context=True)
     async def addquote(self, ctx, quote, category=None):
+        """ adds a quote to the database
+        :quote: The quote to add, wrap it in quotes
+        :category: an optional category to place the quote under.
+        """
         sdb = self.server_db[ctx.message.server.id]
         q = Query()
         if len(sdb.search(q.quote == quote)) > 0:
@@ -39,12 +43,18 @@ class Quotes:
 
     @commands.command(pass_context=True)
     async def deleteqote(self, ctx, quotenum):
+        """Deletes the quote at the given quote index.
+        :quotenum: The number of the quote to be deleted
+        """
         sdb = self.server_db[ctx.message.server.id]
         sdb.remove(eid=quotenum)
         await self.bot.say("Removed quote #{}".format(quotenum))
 
     @commands.command(pass_context=True)
     async def listquotes(self, ctx, category=None):
+        """Lists all quotes or all quotes of a given category
+        :category: The [Optional] category to list quotes from.
+        """
         sdb = self.server_db[ctx.message.server.id]
         quotes = sdb.all()
         line = ""
@@ -60,7 +70,9 @@ class Quotes:
 
     @commands.command(pass_context=True)
     async def quote(self, ctx, param=None):
-        """Gives you a quote either randomly, or given a category or quote number"""
+        """Gives you a quote either randomly, or given a category or quote number
+        :param: Either the quote number to quote, or a category to grab a quote randomly from.
+        """
         sdb = self.server_db[ctx.message.server.id]
         q = Query()
         try:
