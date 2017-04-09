@@ -26,7 +26,7 @@ class Util():
     @commands.command(description='For when you wanna settle the score some other way')
     async def choose(self, *choices: str):
         """Chooses between multiple choices."""
-        if len(choices < 1):
+        if len(choices) < 1:
             await self.bot.say("You need to specify one or more choices.")
             return
         await self.bot.say(random.choice(choices))
