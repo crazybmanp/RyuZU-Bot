@@ -5,7 +5,7 @@ import config
 
 description = 'A possibly useless bot.'
 bot = commands.Bot(command_prefix='!', description=description)
-
+core_cogs = ["Admin", "Util"]
 
 @bot.event
 async def on_ready():
@@ -51,11 +51,20 @@ def is_owner(author):
 
 
 if __name__ == "__main__":
+    print("Loading core cogs...")
+    for extension in core_cogs:
+        try:
+            bot.load_extension(extension)
+        except Exception as e:
+            exc = '{}: {}'.format(type(e).__name__, e)
+            print('Failed to load Core Cog: {}, we will now shut down\n{}'.format(extension, exc))
+            exit()
+    print("Loading Extension cogs")
     for extension in config.startup_extensions:
         try:
             bot.load_extension(extension)
         except Exception as e:
             exc = '{}: {}'.format(type(e).__name__, e)
-            print('Failed to load extension {}\n{}'.format(extension, exc))
+            print('Failed to load cog {}\n{}'.format(extension, exc))
 
     bot.run(config.key)
