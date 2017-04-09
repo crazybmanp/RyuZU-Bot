@@ -56,7 +56,6 @@ class Quotes:
         quote = sdb.get(eid=qnum)
         await self.SayQuote(qnum, quote)
 
-
     @quote.command(pass_context=True)
     async def add(self, ctx, quote, category=None):
         """ adds a quote to the database
@@ -68,8 +67,7 @@ class Quotes:
         if len(sdb.search(q.quote == quote)) > 0:
             await self.bot.say("\"{}\" is already a quote.".format(quote))
             return
-        sdb.insert({'quote': quote, 'category': category})
-        qnum = 0
+        qnum = sdb.insert({'quote': quote, 'category': category})
         await self.bot.say("Added quote {}({}):\"{}\"".format(qnum, category, quote))
 
     @quote.command(pass_context=True)
