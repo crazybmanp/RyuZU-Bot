@@ -114,6 +114,7 @@ class MusicPlayer(Cog):
             state.voice = await self.bot.join_voice_channel(target)
         else:
             await state.voice.move_to(target)
+        await self.bot.say(":no_entry: ＷＡＲＮＩＮＧ: This feature is in beta and will probably have problems. You have been warned. :no_entry:")
         self.channel = ctx.message.author.voice.voice_channel
         return True
 
@@ -136,7 +137,9 @@ class MusicPlayer(Cog):
         Starts playing audio. Joins your audio channel if it isn't there already. Adds your song to the queue if a song is already playing.
         """
         state = self.get_voice_state(ctx.message.server)
-        opts = {'default_search': "auto", 'quiet': True}
+        opts = {'default_search': "auto", 'quiet': True, 'format': 'bestaudio/best', 'extractaudio': True,
+                'audioformat': "mp3", 'noplaylist': True, 'nocheckcertificate': True, 'ignoreerrors': True,
+                'no_warnings': True}
 
         if state.voice is None:
             success = await ctx.invoke(self.join)
