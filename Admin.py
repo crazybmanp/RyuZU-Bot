@@ -40,7 +40,7 @@ class Admin(Cog):
         return m.author == self.bot.user
 
     def is_command(self, m):
-        return m.content.startswith('!')
+        return m.content.startswith(self.bot.config['command_string'])
 
 
 def setup(bot):
