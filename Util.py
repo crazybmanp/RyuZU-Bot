@@ -53,10 +53,12 @@ class Util(Cog):
             return
         await self.bot.say(random.choice(choices))
 
-    @commands.command()
-    async def ping(self):
+    @commands.command(pass_context=True)
+    async def ping(self, ctx):
         """Gives a pong message as quickly as it can."""
-        await self.bot.say("PONG!")
+        m = await self.bot.say("PONG!")
+        td = m.timestamp - ctx.message.timestamp
+        await self.bot.edit_message(m, new_content="PONG! ({})".format(td))
 
 
 def setup(bot):
