@@ -6,7 +6,6 @@ from Cog import Cog
 
 
 class Util(Cog):
-
     @commands.command()
     async def roll(self, *dice: str):
         """Rolls a dice in NdN format."""
@@ -20,6 +19,13 @@ class Util(Cog):
                 r, l = map(int, d.split('d'))
                 if r > 100 or l > 1000000:
                     await self.bot.say("You cannot roll more than 100 dice, or dice bigger than 1 million sides.")
+                    return
+                if l == 1:  # handle this cases separately for fun.
+                    await self.bot.say("How do i roll a one sided die?")
+                    return
+                if r < 1 or l < 1:
+                    await self.bot.say("Rolling less than one die or rolling a die with less than 2 sides makes no "
+                                       "sense.")
                     return
                 rolls.append(r)
                 limits.append(l)
