@@ -177,7 +177,7 @@ class MusicPlayer(Cog):
                 await self.bot.say(":arrow_forward: {} has resumed the music :arrow_forward:".format(ctx.message.author))
                 player.resume()
 
-    @music.command(name="skip", pass_context=True)
+    @music.command(name="skip", aliases=["voteskip"], pass_context=True)
     async def vote_skip(self, ctx):
         """Vote to skip the current song."""
         member_count = len(self.channel.voice_members) - 1  # total number of members in the channel, minus the bot
@@ -207,7 +207,7 @@ class MusicPlayer(Cog):
         else:
             await self.bot.say('You have already voted to skip this song.')
 
-    @music.command(name="stop", aliases=["s"], pass_context=True)
+    @music.command(name="stop", aliases=["s", "leave", "l"], pass_context=True)
     async def stop(self, ctx):
         """Stops playing audio and leaves the voice channel. This also clears the queue."""
         server = ctx.message.server
