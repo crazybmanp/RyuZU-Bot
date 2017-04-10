@@ -1,12 +1,27 @@
+import datetime
 from random import choice
 
 from discord.ext import commands
+from tinydb import Query
 import requests
 
 from Cog import Cog
 
 
+def prune_respects(db):
+    q = Query()
+    now = datetime.now()
+    db.remove(now - q.timestamp > datetime.timedelta(day=1))
+
+
 class Memes(Cog):
+    f_server_db = []
+
+    async def on_ready(self):
+        print('mounting Memes dbs')
+        for server in self.bot.servers:
+            print("mounting {}'s DB".format(server.name))
+            self.f_server_db[server.id] = self.get_cog_db("respects-{}".format(server.id))
 
     @commands.command()
     async def bass(self):
@@ -30,7 +45,9 @@ class Memes(Cog):
     @commands.command(aliases=["nekofact"])
     async def catfact(self):
         """A random fact about cats."""
-        cat_emoji = (":cat:", ":scream_cat:", ":heart_eyes_cat:", ":smirk_cat:", ":kissing_cat:", ":pouting_cat:", ":joy_cat:", ":smile_cat:")
+        cat_emoji = (
+        ":cat:", ":scream_cat:", ":heart_eyes_cat:", ":smirk_cat:", ":kissing_cat:", ":pouting_cat:", ":joy_cat:",
+        ":smile_cat:")
         r = requests.get("http://catfacts-api.appspot.com/api/facts").json()
         await self.bot.say("{0} {1} {2}".format(choice(cat_emoji), r['facts'][0], choice(cat_emoji)))
 
@@ -50,7 +67,8 @@ class Memes(Cog):
 
     @commands.command()
     async def oceanman(self):
-        await self.bot.say("OCEAN MAN 🌊 😍 Take me by the hand ✋ lead me to the land that you understand 🙌 🌊 OCEAN MAN 🌊 😍 The voyage 🚲 to the corner of the 🌎 globe is a real trip 👌 🌊 OCEAN MAN 🌊 😍 The crust of a tan man 👳 imbibed by the sand 👍 Soaking up the 💦 thirst of the land 💯 https://www.youtube.com/watch?v=6E5m_XtCX3c")
+        await self.bot.say(
+            "OCEAN MAN 🌊 😍 Take me by the hand ✋ lead me to the land that you understand 🙌 🌊 OCEAN MAN 🌊 😍 The voyage 🚲 to the corner of the 🌎 globe is a real trip 👌 🌊 OCEAN MAN 🌊 😍 The crust of a tan man 👳 imbibed by the sand 👍 Soaking up the 💦 thirst of the land 💯 https://www.youtube.com/watch?v=6E5m_XtCX3c")
 
     @commands.command(pass_context=True)
     async def reeee(self, ctx):
@@ -59,7 +77,15 @@ class Memes(Cog):
 
     @commands.command()
     async def spaghetti(self):
-        await self.bot.say("His palms :spaghetti:, knees weak, arms :spaghetti:. There's vomit on his :spaghetti: already; mom's :spaghetti:. He's nervous, but on the surface he looks calm :spaghetti:. To drop :spaghetti:, but he keeps on :spaghetti: what he wrote down, the whole crowd goes :spaghetti:, he opens his mouth, but :spaghetti: won't come out, he's choking, how? Everybody's joking now! The :spaghetti:'s run out, time's up, over - BLAOW! https://www.youtube.com/watch?v=SW-BU6keEUw")
+        await self.bot.say(
+            "His palms :spaghetti:, knees weak, arms :spaghetti:. There's vomit on his :spaghetti: already; mom's :spaghetti:. He's nervous, but on the surface he looks calm :spaghetti:. To drop :spaghetti:, but he keeps on :spaghetti: what he wrote down, the whole crowd goes :spaghetti:, he opens his mouth, but :spaghetti: won't come out, he's choking, how? Everybody's joking now! The :spaghetti:'s run out, time's up, over - BLAOW! https://www.youtube.com/watch?v=SW-BU6keEUw")
+
+    @commands.command(pass_context=True, aliases=["f"])
+    async def payrespects(self, ctx):
+        sdb = self.f_server_db[ctx.message.server.id]
+        prune_respects(sdb)
+        sdb.insert({'timestamp': ctx.message.timestamp})
+        await self.bot.say("{} people have paid respects today. o7".format(len(sdb)))
 
 
 def setup(bot):
