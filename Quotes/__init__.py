@@ -1,6 +1,5 @@
 import random
 
-import discord
 from discord.ext import commands
 from tinydb import TinyDB, Query
 
@@ -29,11 +28,7 @@ class Quotes:
     @commands.group(pass_context=True)
     async def quote(self, ctx):
         if ctx.invoked_subcommand is None:
-            sdb = self.server_db[ctx.message.server.id]
-            q = Query()
-            l = sdb.search(q.category == None)
-            quote = random.choice(l)
-            await self.SayQuote(quote.eid, quote)
+            await self.bot.say("Please use sub-commands: give, list, add, or delete.")
 
     @quote.command(pass_context=True)
     async def give(self, ctx, param=None):
@@ -75,6 +70,9 @@ class Quotes:
         """Deletes the quote at the given quote index.
         :quotenum: The number of the quote to be deleted
         """
+        if not ctx.message.author.permissions_in(ctx.message.channel).manage_messages:
+            await self.bot.say("Only Admins are allowed to delete quotes.")
+            return
         sdb = self.server_db[ctx.message.server.id]
         sdb.remove(eid=quotenum)
         await self.bot.say("Removed quote #{}".format(quotenum))
@@ -85,17 +83,46 @@ class Quotes:
         :category: The [Optional] category to list quotes from.
         """
         sdb = self.server_db[ctx.message.server.id]
-        quotes = sdb.all()
+        q = Query()
+        if category is None:
+            quotes = sdb.all()
+        elif category == "None":
+            quotes = sdb.search(q.category == None)
+        else:
+            quotes = sdb.search(q.category == category)
+
+        if len(quotes) < 1:
+            await self.bot.say("No quotes found, are you sure you have the right category?")
+        msgs = []
         line = ""
         for quote in quotes:
             qnum = quote.eid
             if quote["category"] is None:
-                line += "{}:`{}`\r\n".format(qnum, quote["quote"])
+                l = "{}:`{}`\r\n".format(qnum, quote["quote"])
             else:
-                line += "{}({}):`{}`\r\n".format(qnum, quote["category"], quote["quote"])
-        msgs = [line[i:i + 2000] for i in range(0, len(line), 2000)]
+                l = "{}({}):`{}`\r\n".format(qnum, quote["category"], quote["quote"])
+            if len(line) + len(l) > 2000:
+                msgs.append(line)
+                line = ""
+            line += l
         for m in msgs:
             await self.bot.say(m)
+
+    @quote.command(pass_context=True)
+    async def categories(self, ctx):
+        """
+        Lists all quote categories.
+        """
+        sdb = self.server_db[ctx.message.server.id]
+        quotes = sdb.all()
+        categories = []
+        for quote in quotes:
+            if quote["category"] not in categories:
+                categories.append(quote["category"])
+        line = "Categories: \r\n"
+        for c in categories:
+            line += "\r\n{}".format(c)
+        await self.bot.say(line)
 
     async def SayQuote(self, qnum, quote):
         if quote["category"] is None:
