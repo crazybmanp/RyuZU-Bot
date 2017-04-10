@@ -99,7 +99,7 @@ class MusicPlayer:
         if ctx.invoked_subcommand is None:
             pass
 
-    @music.command(name="join", pass_context=True)
+    @music.command(name="join", aliases=["j"], pass_context=True)
     async def join(self, ctx):
         """The bot joins your current voice channel"""
         target = ctx.message.author.voice_channel
@@ -116,7 +116,7 @@ class MusicPlayer:
         self.channel = ctx.message.author.voice.voice_channel
         return True
 
-    @music.command(name="playlist", pass_context=True)
+    @music.command(name="playlist", aliases=["list", "pl"], pass_context=True)
     async def playlist(self, ctx):
         """Shows the current playlist."""
         state = self.get_voice_state(ctx.message.server)
@@ -129,7 +129,7 @@ class MusicPlayer:
 
         await self.bot.say(msg)
 
-    @music.command(name="q", pass_context=True)
+    @music.command(name="q", aliases=["queue"], pass_context=True)
     async def queue(self, ctx, *, song):
         """
         Starts playing audio. Joins your audio channel if it isn't there already. Adds your song to the queue if a song is already playing.
@@ -153,6 +153,16 @@ class MusicPlayer:
             entry = PlaylistEntry(ctx.message, player)
             await self.bot.say(entry.video_info)
             await state.songs.put(entry)
+
+    @music.command(aliases=["p"], pass_context=True)
+    async def pause(self, ctx):
+        """Allows Admins or the requester to pause the currently playing song."""
+        state = self.get_voice_state(ctx.message.server)
+
+        if ctx.message.author.server_permissions.administrator or ctx.message.author == state.current.requester:
+            if state.is_playing():
+                player = state.player
+                player.pause()
 
     @music.command(name="skip", pass_context=True)
     async def vote_skip(self, ctx):
@@ -184,7 +194,7 @@ class MusicPlayer:
         else:
             await self.bot.say('You have already voted to skip this song.')
 
-    @music.command(name="stop", pass_context=True)
+    @music.command(name="stop", aliases=["s"], pass_context=True)
     async def stop(self, ctx):
         """Stops playing audio and leaves the voice channel. This also clears the queue."""
         server = ctx.message.server
@@ -201,7 +211,7 @@ class MusicPlayer:
         except:
             pass
 
-    @music.command(name="volume", pass_context=True)
+    @music.command(name="volume", aliases=["v"], pass_context=True)
     async def volume(self, ctx, value: int):
         """Sets the volume of the currently playing song."""
 
