@@ -80,8 +80,6 @@ class Quotes(Cog):
             quotes = sdb.search(q.category == None)
         else:
             quotes = sdb.search(q.category == category)
-
-        print(len(quotes))
         if len(quotes) < 1:
             await self.bot.say("No quotes found, are you sure you have the right category?")
         msgs = []

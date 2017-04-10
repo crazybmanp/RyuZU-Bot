@@ -74,7 +74,6 @@ class OWext(Cog):
     async def unlinkbnet(self, ctx, user):
         await self.bot.delete_message(ctx.message)
         await self.bot.send_typing(ctx.message.channel)
-        print("starting unlink")
         bnetlink = Query()
         sdb = self.server_db[ctx.message.server.id]
         sdb.remove(bnetlink.userid == ctx.message.mentions[0].id)
