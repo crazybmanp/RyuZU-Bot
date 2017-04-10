@@ -17,9 +17,7 @@ class Util(Cog):
         i = 1
         try:
             for d in dice:
-                print(d)
                 r, l = map(int, d.split('d'))
-                print("{} \ {}".format(r, l))
                 if r > 100 or l > 1000000:
                     await self.bot.say("You cannot roll more than 100 dice, or dice bigger than 1 million sides.")
                     return
@@ -32,7 +30,6 @@ class Util(Cog):
         result = ""
         for r, l in zip(rolls, limits):
             linerolls = []
-            print("Rolling {}d{}".format(r, l))
             for i in range(0, r):
                 linerolls.append(random.randint(1, l))
             linetotal = sum(linerolls)
