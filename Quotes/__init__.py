@@ -93,14 +93,18 @@ class Quotes:
 
         if len(quotes) < 1:
             await self.bot.say("No quotes found, are you sure you have the right category?")
+        msgs = []
         line = ""
         for quote in quotes:
             qnum = quote.eid
             if quote["category"] is None:
-                line += "{}:`{}`\r\n".format(qnum, quote["quote"])
+                l = "{}:`{}`\r\n".format(qnum, quote["quote"])
             else:
-                line += "{}({}):`{}`\r\n".format(qnum, quote["category"], quote["quote"])
-        msgs = [line[i:i + 2000] for i in range(0, len(line), 2000)]
+                l = "{}({}):`{}`\r\n".format(qnum, quote["category"], quote["quote"])
+            if len(line) + len(l) > 2000:
+                msgs.append(line)
+                line = ""
+            line += l
         for m in msgs:
             await self.bot.say(m)
 
