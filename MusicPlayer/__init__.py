@@ -68,7 +68,6 @@ class VoiceState:
 
 
 class MusicPlayer(Cog):
-    """Type !help music for a list of subcommands"""
     def __init__(self, bot):
         super().__init__(bot)
         self.channel = None
@@ -99,7 +98,7 @@ class MusicPlayer(Cog):
     @commands.group(pass_context=True)
     async def music(self, ctx):
         if ctx.invoked_subcommand is None:
-            pass
+            await self.bot.say("Please type `{}help music` for information about this command".format(self.bot.config['command_string']))
 
     @music.command(name="join", aliases=["j"], pass_context=True)
     async def join(self, ctx):
@@ -164,6 +163,7 @@ class MusicPlayer(Cog):
         if ctx.message.author.server_permissions.administrator or ctx.message.author == state.current.requester:
             if state.is_playing():
                 player = state.player
+                await self.bot.say(":pause_button: {} has paused the music :pause_button:".format(ctx.message.author))
                 player.pause()
 
     @music.command(aliases=["r"], pass_context=True)
@@ -174,6 +174,7 @@ class MusicPlayer(Cog):
         if ctx.message.author.server_permissions.administrator or ctx.message.author == state.current.requester:
             if state.is_playing():
                 player = state.player
+                await self.bot.say(":arrow_forward: {} has resumed the music :arrow_forward:".format(ctx.message.author))
                 player.resume()
 
     @music.command(name="skip", pass_context=True)
@@ -193,13 +194,13 @@ class MusicPlayer(Cog):
 
         voter = ctx.message.author
         if voter == state.current.requester:
-            await self.bot.say('Requester requested skipping song...')
+            await self.bot.say(':track_next: Requester requested skipping song... :track_next:')
             state.skip()
         elif voter.id not in state.skip_votes:
             state.skip_votes.add(voter.id)
             total_votes = len(state.skip_votes)
             if total_votes >= vote_req:
-                await self.bot.say('Skip vote passed, skipping song...')
+                await self.bot.say(':track_next: Skip vote passed, skipping song... :track_next:')
                 state.skip()
             else:
                 await self.bot.say('Skip vote added, currently at [{}/{}]'.format(total_votes, vote_req))
