@@ -5,6 +5,8 @@ import platform
 import discord
 from discord.ext import commands
 
+from Cog import Cog
+
 if not discord.opus.is_loaded() and platform.system() == "Windows":
     discord.opus.load_opus('opus')
 
@@ -65,10 +67,10 @@ class VoiceState:
             await self.play_next_song.wait()
 
 
-class MusicPlayer:
+class MusicPlayer(Cog):
     """Type !help music for a list of subcommands"""
     def __init__(self, bot):
-        self.bot = bot
+        super().__init__(bot)
         self.channel = None
         self.voice_states = {}
 
@@ -156,7 +158,7 @@ class MusicPlayer:
 
     @music.command(aliases=["p"], pass_context=True)
     async def pause(self, ctx):
-        """Allows Admins or the requester to pause the currently playing song."""
+        """Allows Admins or the requester to pause the song."""
         state = self.get_voice_state(ctx.message.server)
 
         if ctx.message.author.server_permissions.administrator or ctx.message.author == state.current.requester:
@@ -166,7 +168,7 @@ class MusicPlayer:
 
     @music.command(aliases=["r"], pass_context=True)
     async def resume(self, ctx):
-        """Resumes the currently playing song."""
+        """Allows Admins or the requester to resume the song."""
         state = self.get_voice_state(ctx.message.server)
 
         if ctx.message.author.server_permissions.administrator or ctx.message.author == state.current.requester:
@@ -221,15 +223,15 @@ class MusicPlayer:
         except:
             pass
 
-    @music.command(name="volume", aliases=["v"], pass_context=True)
-    async def volume(self, ctx, value: int):
-        """Sets the volume of the currently playing song."""
-
-        state = self.get_voice_state(ctx.message.server)
-        if state.is_playing():
-            player = state.player
-            player.volume = value / 100
-            await self.bot.say('Set the volume to {:.0%}'.format(player.volume))
+    # @music.command(name="volume", aliases=["v"], pass_context=True)
+    # async def volume(self, ctx, value: int):
+    #     """Sets the volume of the currently playing song."""
+    #
+    #     state = self.get_voice_state(ctx.message.server)
+    #     if state.is_playing():
+    #         player = state.player
+    #         player.volume = value / 100
+    #         await self.bot.say('Set the volume to {:.0%}'.format(player.volume))
 
 
 def setup(bot):
