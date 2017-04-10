@@ -3,10 +3,10 @@ from random import choice
 from discord.ext import commands
 import requests
 
+from Cog import Cog
 
-class Memes:
-    def __init__(self, bot):
-        self.bot = bot
+
+class Memes(Cog):
 
     @commands.command()
     async def bass(self):
@@ -21,13 +21,13 @@ class Memes:
 
         await self.bot.say("{0} https://www.youtube.com/watch?v=h-mUGj41hWA".format(choice(options)))
 
-    @commands.command()
+    @commands.command(aliases=["neko"])
     async def cat(self):
         """Gets a random cat picture."""
         r = requests.get("https://random.cat/meow").json()
         await self.bot.say(r['file'])
 
-    @commands.command()
+    @commands.command(aliases=["nekofact"])
     async def catfact(self):
         """A random fact about cats."""
         cat_emoji = (":cat:", ":scream_cat:", ":heart_eyes_cat:", ":smirk_cat:", ":kissing_cat:", ":pouting_cat:", ":joy_cat:", ":smile_cat:")

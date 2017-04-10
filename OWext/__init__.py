@@ -1,20 +1,17 @@
 import html2text
 from discord.ext import commands
-
 from overwatch_api import *
-
 from tinydb import TinyDB, Query
 
+from Cog import Cog
 
-class OWext():
+
+class OWext(Cog):
     db = TinyDB('OW-servers.json')
     server_db = {}
 
     ow = OverwatchAPI('key')
     owRegions = ['us', 'eu', 'kr', 'cn', 'jp', 'global']
-
-    def __init__(self, bot):
-        self.bot = bot
 
     async def on_ready(self):
         print('mounting Overwatch dbs')
