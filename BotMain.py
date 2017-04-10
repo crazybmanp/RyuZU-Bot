@@ -57,6 +57,12 @@ async def unload(ctx, extension_name: str):
     await bot.say("{} unloaded.".format(extension_name))
 
 
+@bot.command(aliases=["bug", "suggest"])
+async def issue():
+    """Gives a link to report any issues or give us suggestions"""
+    await bot.say("Find a problem or have a suggestion? Let us know here: https://github.com/crazybmanp/RyuZU-Bot/issues/new")
+
+
 def is_owner(author):
     for owner in bot.config['owner_usernames']:
         p = owner.split("#")
