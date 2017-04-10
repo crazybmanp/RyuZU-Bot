@@ -9,13 +9,17 @@ from Cog import Cog
 
 
 def prune_respects(db):
-    q = Query()
-    now = datetime.now()
-    db.remove(now - q.timestamp > datetime.timedelta(day=1))
-
+    now = datetime.datetime.now()
+    all = db.all()
+    d = []
+    for a in all:
+        dt = datetime.datetime.strptime(a['timestamp'], '%b %d %Y %I:%M%p')
+        if now - dt > datetime.timedelta(days=1):
+            d.append(a.eid)
+    db.remove(eids=d)
 
 class Memes(Cog):
-    f_server_db = []
+    f_server_db = {}
 
     async def on_ready(self):
         print('mounting Memes dbs')
@@ -84,7 +88,7 @@ class Memes(Cog):
     async def payrespects(self, ctx):
         sdb = self.f_server_db[ctx.message.server.id]
         prune_respects(sdb)
-        sdb.insert({'timestamp': ctx.message.timestamp})
+        sdb.insert({'timestamp': ctx.message.timestamp.strftime('%b %d %Y %I:%M%p')})
         await self.bot.say("{} people have paid respects today. o7".format(len(sdb)))
 
 
