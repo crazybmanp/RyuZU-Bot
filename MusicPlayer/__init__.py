@@ -164,6 +164,16 @@ class MusicPlayer:
                 player = state.player
                 player.pause()
 
+    @music.command(aliases=["r"], pass_context=True)
+    async def resume(self, ctx):
+        """Resumes the currently playing song."""
+        state = self.get_voice_state(ctx.message.server)
+
+        if ctx.message.author.server_permissions.administrator or ctx.message.author == state.current.requester:
+            if state.is_playing():
+                player = state.player
+                player.resume()
+
     @music.command(name="skip", pass_context=True)
     async def vote_skip(self, ctx):
         """Vote to skip the current song."""
