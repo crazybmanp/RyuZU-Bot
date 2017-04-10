@@ -23,8 +23,16 @@ class Memes:
 
     @commands.command()
     async def cat(self):
+        """Gets a random cat picture."""
         r = requests.get("https://random.cat/meow").json()
         await self.bot.say(r['file'])
+
+    @commands.command()
+    async def catfact(self):
+        """A random fact about cats."""
+        cat_emoji = (":cat:", ":scream_cat:", ":heart_eyes_cat:", ":smirk_cat:", ":kissing_cat:", ":pouting_cat:", ":joy_cat:", ":smile_cat:")
+        r = requests.get("http://catfacts-api.appspot.com/api/facts").json()
+        await self.bot.say("{0} {1} {2}".format(choice(cat_emoji), r['facts'][0], choice(cat_emoji)))
 
     @commands.command(pass_context=True)
     async def feelsbadman(self, ctx):

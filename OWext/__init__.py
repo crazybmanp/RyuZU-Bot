@@ -7,7 +7,7 @@ from tinydb import TinyDB, Query
 
 
 class OWext():
-    db = TinyDB('servers.json')
+    db = TinyDB('OW-servers.json')
     server_db = {}
 
     ow = OverwatchAPI('key')
@@ -15,14 +15,16 @@ class OWext():
 
     def __init__(self, bot):
         self.bot = bot
-        print('mounting dbs')
+
+    async def on_ready(self):
+        print('mounting Overwatch dbs')
         server_record = Query()
-        for server in bot.servers:
+        for server in self.bot.servers:
             r = self.db.search(server_record.name == server.name)
             if len(r) == 0:
                 print("No records for {}... creating.".format(server.name))
                 self.db.insert(
-                    {'name': server.name, 'id': server.id, 'dbFile': '{}.json'.format(server.id),
+                    {'name': server.name, 'sid': server.id, 'dbFile': 'OW-{}.json'.format(server.id),
                      'announceChannel': None})
                 r = self.db.search(server_record.name == server.name)
             print("mounting {}'s DB".format(server.name))
