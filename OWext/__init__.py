@@ -7,7 +7,6 @@ from Cog import Cog
 
 
 class OWext(Cog):
-    db = TinyDB('OW-servers.json')
     server_db = {}
 
     ow = OverwatchAPI('key')
@@ -15,17 +14,9 @@ class OWext(Cog):
 
     async def on_ready(self):
         print('mounting Overwatch dbs')
-        server_record = Query()
         for server in self.bot.servers:
-            r = self.db.search(server_record.name == server.name)
-            if len(r) == 0:
-                print("No records for {}... creating.".format(server.name))
-                self.db.insert(
-                    {'name': server.name, 'sid': server.id, 'dbFile': 'OW-{}.json'.format(server.id),
-                     'announceChannel': None})
-                r = self.db.search(server_record.name == server.name)
             print("mounting {}'s DB".format(server.name))
-            self.server_db[server.id] = TinyDB(r[0]['dbFile'])
+            self.server_db[server.id] = self.get_cog_db(server.id)
 
     @commands.command(pass_context=True)
     async def stats(self, ctx, user=None):
