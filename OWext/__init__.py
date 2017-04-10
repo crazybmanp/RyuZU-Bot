@@ -1,7 +1,7 @@
 import html2text
 from discord.ext import commands
 from overwatch_api import *
-from tinydb import TinyDB, Query
+from tinydb import Query
 
 from Cog import Cog
 
