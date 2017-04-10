@@ -23,6 +23,9 @@ class Util(Cog):
                 if r > 100 or l > 1000000:
                     await self.bot.say("You cannot roll more than 100 dice, or dice bigger than 1 million sides.")
                     return
+                if l == 1:
+                    await self.bot.say("How do i roll a one sided die?")
+                    return
                 rolls.append(r)
                 limits.append(l)
         except ValueError:
