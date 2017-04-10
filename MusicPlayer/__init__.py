@@ -118,11 +118,16 @@ class MusicPlayer(Cog):
         self.channel = ctx.message.author.voice.voice_channel
         return True
 
+    @music.command(name="nowplaying", aliases=["np"], pass_context=True)
+    async def now_playing(self, ctx):
+        state = self.get_voice_state(ctx.message.server)
+        await self.bot.say(":notes:Now playing {0}:notes:".format(state.current.video_info))
+
     @music.command(name="playlist", aliases=["list", "pl"], pass_context=True)
     async def playlist(self, ctx):
         """Shows the current playlist."""
         state = self.get_voice_state(ctx.message.server)
-        msg = "```css\n{0}'s Playlist\n\n".format(self.bot.user.name)
+        msg = "```css\n{0}'s Playlist\n\nNow Playing: {1}\n\n".format(self.bot.user.name, state.current.video_info)
 
         for s in state.songs._queue:
             msg = msg + "{0} : {1}\n".format(state.songs._queue.index(s) + 1, s)
