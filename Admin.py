@@ -25,7 +25,7 @@ class Admin(Cog):
 
     @commands.command(pass_context=True)
     async def say(self, ctx):
-        """Purges all (100 by default) previous messages from chat."""
+        """Makes the bot say something (removes your message)"""
         await self.bot.delete_message(ctx.message)
         await self.bot.send_typing(ctx.message.channel)
         if not ctx.message.author.permissions_in(ctx.message.channel).manage_messages:
@@ -40,7 +40,7 @@ class Admin(Cog):
         return m.author == self.bot.user
 
     def is_command(self, m):
-        return m.content.startswith('!')
+        return m.content.startswith(self.bot.config['command_string'])
 
 
 def setup(bot):

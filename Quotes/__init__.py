@@ -81,6 +81,7 @@ class Quotes(Cog):
         else:
             quotes = sdb.search(q.category == category)
 
+        print(len(quotes))
         if len(quotes) < 1:
             await self.bot.say("No quotes found, are you sure you have the right category?")
         msgs = []
@@ -95,6 +96,7 @@ class Quotes(Cog):
                 msgs.append(line)
                 line = ""
             line += l
+        msgs.append(line)
         for m in msgs:
             await self.bot.say(m)
 
