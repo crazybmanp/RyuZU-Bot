@@ -1,6 +1,5 @@
 import random
 
-import discord
 from discord.ext import commands
 from tinydb import TinyDB, Query
 
@@ -84,8 +83,14 @@ class Quotes:
         :category: The [Optional] category to list quotes from.
         """
         sdb = self.server_db[ctx.message.server.id]
-        q=Query()
-        quotes = sdb.search(q.category == category)
+        q = Query()
+        if category is None:
+            quotes = sdb.all()
+        elif category == "None":
+            quotes = sdb.search(q.category == None)
+        else:
+            quotes = sdb.search(q.category == category)
+
         if len(quotes) < 1:
             await self.bot.say("No quotes found, are you sure you have the right category?")
         line = ""
@@ -110,12 +115,10 @@ class Quotes:
         for quote in quotes:
             if quote["category"] not in categories:
                 categories.append(quote["category"])
-
         line = "Categories: \r\n"
         for c in categories:
             line += "\r\n{}".format(c)
         await self.bot.say(line)
-
 
     async def SayQuote(self, qnum, quote):
         if quote["category"] is None:
