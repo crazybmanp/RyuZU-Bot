@@ -33,7 +33,7 @@ async def on_ready():
     await bot.change_presence(game=discord.Game(name=game))
 
 
-@bot.command(pass_context=True)
+@bot.command(pass_context=True, hidden=True)
 async def load(ctx, extension_name: str):
     """Loads an extension."""
     if not is_owner(ctx.message.author):
@@ -47,7 +47,7 @@ async def load(ctx, extension_name: str):
     await bot.say("{} loaded.".format(extension_name))
 
 
-@bot.command(pass_context=True)
+@bot.command(pass_context=True, hidden=True)
 async def unload(ctx, extension_name: str):
     """Unloads an extension."""
     if not is_owner(ctx.message.author):
@@ -55,6 +55,17 @@ async def unload(ctx, extension_name: str):
         return
     bot.unload_extension(extension_name)
     await bot.say("{} unloaded.".format(extension_name))
+
+
+@bot.command(pass_context=True, hidden=True)
+async def shutdown(ctx):
+    """Shuts down the bot"""
+    if not is_owner(ctx.message.author):
+        await bot.say("You must be {0}'s owner to do this.".format(bot.user.name))
+        return
+    await bot.change_presence(game=discord.Game(name="Shutting down"))
+    print("Shutting down...")
+    await bot.logout()
 
 
 @bot.command(aliases=["bug", "suggest"])
