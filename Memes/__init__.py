@@ -3,10 +3,10 @@ from random import choice
 from discord.ext import commands
 import requests
 
+from Cog import Cog
 
-class Memes:
-    def __init__(self, bot):
-        self.bot = bot
+
+class Memes(Cog):
 
     @commands.command()
     async def bass(self):

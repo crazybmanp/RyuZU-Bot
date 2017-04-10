@@ -3,13 +3,12 @@ import random
 from discord.ext import commands
 from tinydb import TinyDB, Query
 
+from Cog import Cog
 
-class Quotes:
+
+class Quotes(Cog):
     db = TinyDB('Quote-servers.json')
     server_db = {}
-
-    def __init__(self, bot):
-        self.bot = bot
 
     async def on_ready(self):
         print('mounting Quote dbs')

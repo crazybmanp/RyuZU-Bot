@@ -2,10 +2,10 @@ import random
 
 from discord.ext import commands
 
+from Cog import Cog
 
-class Util():
-    def __init__(self, bot):
-        self.bot = bot
+
+class Util(Cog):
 
     @commands.command()
     async def roll(self, dice: str):

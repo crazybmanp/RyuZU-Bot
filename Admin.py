@@ -1,9 +1,9 @@
 from discord.ext import commands
 
+from Cog import Cog
 
-class Admin:
-    def __init__(self, bot):
-        self.bot = bot
+
+class Admin(Cog):
 
     @commands.command(pass_context=True)
     async def purge(self, ctx, messages=100):
