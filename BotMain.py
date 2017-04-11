@@ -71,7 +71,21 @@ async def shutdown(ctx):
 @bot.command(aliases=["bug", "suggest"])
 async def issue():
     """Gives a link to report any issues or give us suggestions"""
-    await bot.say("Find a problem or have a suggestion? Let us know here: https://github.com/crazybmanp/RyuZU-Bot/issues/new")
+    await bot.say(
+        "Find a problem or have a suggestion? Let us know here: https://github.com/crazybmanp/RyuZU-Bot/issues/new")
+
+
+@bot.command()
+async def info():
+    """Displays the version and other info about the bot"""
+    e = discord.Embed(type="rich", title=bot.user.name, url="https://github.com/crazybmanp/RyuZU-Bot/",
+                      description="A Discord bot build on modularity via cogs.", color=discord.Color(0xFF00FF))
+    e.add_field(name="Version", value="?.?.?")
+    e.add_field(name="Developers", value="crazybmanp#9518, raz#9254", inline=True)
+    e.add_field(name="Contributors", value="None", inline=True)
+    e.add_field(name="Github", value="https://github.com/crazybmanp/RyuZU-Bot/")
+
+    await bot.say(embed=e)
 
 
 def is_owner(author):
