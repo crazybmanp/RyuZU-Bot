@@ -3,7 +3,7 @@ import json
 import discord
 
 from RyuZU.Core import Bot
-from RyuZU.Core.helpers import is_owner
+from RyuZU.Core.utils import is_owner
 
 settings = None
 

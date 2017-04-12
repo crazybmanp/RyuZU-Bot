@@ -1,10 +1,21 @@
+import datetime
 from random import choice
 
 import requests
 from discord.ext import commands
 
 from RyuZU.Core import Cog
-from .helpers import prune_respects
+
+
+def prune_respects(db):
+    now = datetime.datetime.now()
+    _all = db.all()
+    d = []
+    for a in _all:
+        dt = datetime.datetime.strptime(a['timestamp'], '%b %d %Y %I:%M%p')
+        if now - dt > datetime.timedelta(days=1):
+            d.append(a.eid)
+    db.remove(eids=d)
 
 
 class Memes(Cog):
