@@ -3,7 +3,7 @@ from discord.ext import commands
 from overwatch_api import *
 from tinydb import Query
 
-from Cog import Cog
+from RyuZU.Core import Cog
 
 
 class OWext(Cog):

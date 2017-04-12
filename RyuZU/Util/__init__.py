@@ -2,7 +2,7 @@ import random
 
 from discord.ext import commands
 
-from Cog import Cog
+from RyuZU.Core import Cog
 
 
 class Util(Cog):

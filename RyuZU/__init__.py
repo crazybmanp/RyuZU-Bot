@@ -2,7 +2,8 @@ import json
 
 import discord
 
-from CustomBot import CustomBot
+from RyuZU.Core import Bot
+from RyuZU.Core.utils import is_owner
 
 settings = None
 
@@ -12,8 +13,7 @@ except FileNotFoundError:
     print("You need to create a settings file!")
     exit()
 
-bot = CustomBot(settings)
-core_cogs = ["Admin", "Util"]
+bot = Bot(settings)
 
 
 @bot.event
@@ -36,7 +36,7 @@ async def on_ready():
 @bot.command(pass_context=True, hidden=True)
 async def load(ctx, extension_name: str):
     """Loads an extension."""
-    if not is_owner(ctx.message.author):
+    if not is_owner(bot, ctx.message.author):
         await bot.say("You must be {0}'s owner to do this.".format(bot.user.name))
         return
     try:
@@ -50,7 +50,7 @@ async def load(ctx, extension_name: str):
 @bot.command(pass_context=True, hidden=True)
 async def unload(ctx, extension_name: str):
     """Unloads an extension."""
-    if not is_owner(ctx.message.author):
+    if not is_owner(bot, ctx.message.author):
         await bot.say("You must be {0}'s owner to do this.".format(bot.user.name))
         return
     bot.unload_extension(extension_name)
@@ -60,7 +60,7 @@ async def unload(ctx, extension_name: str):
 @bot.command(pass_context=True, hidden=True)
 async def shutdown(ctx):
     """Shuts down the bot"""
-    if not is_owner(ctx.message.author):
+    if not is_owner(bot, ctx.message.author):
         await bot.say("You must be {0}'s owner to do this.".format(bot.user.name))
         return
     await bot.change_presence(game=discord.Game(name="Shutting down"))
@@ -71,32 +71,4 @@ async def shutdown(ctx):
 @bot.command(aliases=["bug", "suggest"])
 async def issue():
     """Gives a link to report any issues or give us suggestions"""
-    await bot.say("Find a problem or have a suggestion? Let us know here: https://github.com/crazybmanp/RyuZU-Bot/issues/new")
-
-
-def is_owner(author):
-    for owner in bot.config['owner_usernames']:
-        p = owner.split("#")
-        if p[0] == author.name and p[1] == author.discriminator:
-            return True
-    return False
-
-
-if __name__ == "__main__":
-    print("Loading core cogs...")
-    for extension in core_cogs:
-        try:
-            bot.load_extension(extension)
-        except Exception as e:
-            exc = '{}: {}'.format(type(e).__name__, e)
-            print('Failed to load Core Cog: {}, we will now shut down\n{}'.format(extension, exc))
-            exit()
-    print("Loading Extension cogs...")
-    for extension in bot.config['startup_extensions']:
-        try:
-            bot.load_extension(extension)
-        except Exception as e:
-            exc = '{}: {}'.format(type(e).__name__, e)
-            print('Failed to load cog {}\n{}'.format(extension, exc))
-
-    bot.run(bot.config['key'])
+    await bot.say("Find a problem or have a suggestion? Let us know here: https://github.com/crazybmanp/RyuZU/issues/new")
