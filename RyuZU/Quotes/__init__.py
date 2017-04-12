@@ -1,8 +1,9 @@
 import random
 
-from RyuZU.Core import Cog
 from discord.ext import commands
 from tinydb import Query
+
+from RyuZU.Core import Cog
 
 
 class Quotes(Cog):

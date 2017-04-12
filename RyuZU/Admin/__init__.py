@@ -1,5 +1,6 @@
-from RyuZU.Core import Cog
 from discord.ext import commands
+
+from RyuZU.Core import Cog
 
 
 class Admin(Cog):
