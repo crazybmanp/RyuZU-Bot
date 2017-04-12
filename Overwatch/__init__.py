@@ -6,7 +6,7 @@ from tinydb import Query
 from RyuZU.Core import Cog
 
 
-class OWext(Cog):
+class Overwatch(Cog):
     server_db = {}
 
     ow = OverwatchAPI('key')
@@ -112,4 +112,4 @@ class OWext(Cog):
 
 
 def setup(bot):
-    bot.add_cog(OWext(bot))
+    bot.add_cog(Overwatch(bot))
