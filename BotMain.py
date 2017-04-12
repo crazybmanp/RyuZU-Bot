@@ -81,9 +81,10 @@ async def info():
     e = discord.Embed(type="rich", title=bot.user.name, url="https://github.com/crazybmanp/RyuZU-Bot/",
                       description="A Discord bot build on modularity via cogs.", color=discord.Color(0xFF00FF))
     e.add_field(name="Version", value="?.?.?")
-    e.add_field(name="Developers", value="crazybmanp#9518, raz#9254", inline=True)
-    e.add_field(name="Contributors", value="None", inline=True)
-    e.add_field(name="Github", value="https://github.com/crazybmanp/RyuZU-Bot/")
+    e.add_field(name="Library", value="[discord.py](https://github.com/Rapptz/discord.py)", inline=True)
+    e.add_field(name="Github", value="[RyuZU-Bot](https://github.com/crazybmanp/RyuZU-Bot)", inline=True)
+    e.add_field(name="Developers", value="crazybmanp#9518, raz#9254", inline=False)
+    e.add_field(name="Contributors", value="None", inline=False)
 
     await bot.say(embed=e)
 
