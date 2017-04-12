@@ -1,11 +1,9 @@
 import datetime
 from random import choice
 
-from discord.ext import commands
-from tinydb import Query
 import requests
-
-from Cog import Cog
+from RyuZU.Core import Cog
+from discord.ext import commands
 
 
 def prune_respects(db):
@@ -17,6 +15,7 @@ def prune_respects(db):
         if now - dt > datetime.timedelta(days=1):
             d.append(a.eid)
     db.remove(eids=d)
+
 
 class Memes(Cog):
     f_server_db = {}
