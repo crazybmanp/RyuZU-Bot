@@ -1,11 +1,15 @@
 import json
 
 import discord
+from ._version import get_versions
 
 from RyuZU.Core import Bot
 from RyuZU.Core.utils import is_owner
 
 settings = None
+
+__version__ = get_versions()['version']
+del get_versions
 
 try:
     settings = json.load(open("settings.json"))
@@ -26,9 +30,9 @@ async def on_ready():
     print('------')
 
     if 'dev_mode' in bot.config and bot.config['dev_mode']:
-        game = "[DevMode]"
+        game = "[DevMode] | {}".format(__version__)
     else:
-        game = "Being a useless bot"
+        game = "{}help | {}".format(bot.config['command_string'], __version__)
 
     await bot.change_presence(game=discord.Game(name=game))
 
