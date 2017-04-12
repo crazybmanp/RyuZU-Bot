@@ -5,7 +5,7 @@ import platform
 import discord
 from discord.ext import commands
 
-from Cog import Cog
+from RyuZU.Core import Cog
 
 if not discord.opus.is_loaded() and platform.system() == "Windows":
     discord.opus.load_opus('opus')
