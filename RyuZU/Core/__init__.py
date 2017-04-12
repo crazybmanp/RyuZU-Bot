@@ -12,6 +12,14 @@ class Bot(commands.Bot):
     def __init__(self, config):
         super().__init__(command_prefix=config['command_string'], description=config['description'])
         self.config = config
+        self.load_cogs()
+
+    def load_extension(self, name, core_cog=False):
+        """Thin wrapper to make packaged life easier"""
+        if core_cog:
+            super().load_extension("RyuZU.{}".format(name))
+        else:
+            super().load_extension(name)
 
     def update_config(self):
         """Writes the running config to the json file"""
@@ -27,9 +35,29 @@ class Bot(commands.Bot):
         self.Databases[databasename] = db
         return db
 
-    def load_extension(self, name):
-        """Thin wrapper to make packaged life easier"""
-        super().load_extension("RyuZU.{}".format(name))
+    def load_cogs(self):
+        """Called on initialization. This isn't for dynamic loading/unloading of cogs"""
+        core_cogs = ["Admin", "Util"]
+
+        print("Loading core cogs...")
+        for extension in core_cogs:
+            try:
+                self.load_extension(extension, core_cog=True)
+            except Exception as e:
+                exc = '{}: {}'.format(type(e).__name__, e)
+                print('Failed to load Core Cog: {}, we will now shut down\n{}'.format(extension, exc))
+                exit()
+
+        ext_cogs = []
+        print("Loading Extension cogs...")
+        for extension in self.config['startup_extensions']:
+            try:
+                self.load_extension(extension)
+                ext_cogs.append(extension)
+            except Exception as e:
+                exc = '{}: {}'.format(type(e).__name__, e)
+                print('Failed to load cog {}\n{}'.format(extension, exc))
+        print("Loaded the following cogs: {}".format(ext_cogs))
 
 
 class Cog:
