@@ -6,6 +6,8 @@ from discord.ext import commands
 
 from RyuZU.Core import Cog
 
+FileVersion = "0.1"
+
 
 def prune_respects(db):
     now = datetime.datetime.now()
@@ -93,4 +95,4 @@ class Memes(Cog):
 
 
 def setup(bot):
-    bot.add_cog(Memes(bot))
+    bot.add_cog(Memes(bot, FileVersion))
