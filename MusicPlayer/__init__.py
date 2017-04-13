@@ -7,6 +7,8 @@ from discord.ext import commands
 
 from RyuZU.Core import Cog
 
+FileVersion = "0.1"
+
 if not discord.opus.is_loaded() and platform.system() == "Windows":
     discord.opus.load_opus('opus')
 
@@ -68,8 +70,8 @@ class VoiceState:
 
 
 class MusicPlayer(Cog):
-    def __init__(self, bot):
-        super().__init__(bot)
+    def __init__(self, bot, version):
+        super().__init__(bot, version)
         self.channel = None
         self.voice_states = {}
 
@@ -244,4 +246,4 @@ class MusicPlayer(Cog):
 
 
 def setup(bot):
-    bot.add_cog(MusicPlayer(bot))
+    bot.add_cog(MusicPlayer(bot, FileVersion))

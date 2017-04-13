@@ -61,8 +61,9 @@ class Bot(commands.Bot):
 
 
 class Cog:
-    def __init__(self, bot, settings=None):
+    def __init__(self, bot, version, settings=None):
         self.bot = bot
+        self.__version__ = version
         self.settings = settings
 
         if self.settings is not None:

@@ -1,11 +1,15 @@
 import json
 
 import discord
+from ._version import get_versions
 
 from RyuZU.Core import Bot
 from RyuZU.Core.utils import is_owner
 
 settings = None
+
+__version__ = get_versions()['version']
+del get_versions
 
 try:
     settings = json.load(open("settings.json"))
@@ -26,9 +30,9 @@ async def on_ready():
     print('------')
 
     if 'dev_mode' in bot.config and bot.config['dev_mode']:
-        game = "[DevMode]"
+        game = "[DevMode] | {}".format(__version__)
     else:
-        game = "Being a useless bot"
+        game = "{}help | {}".format(bot.config['command_string'], __version__)
 
     await bot.change_presence(game=discord.Game(name=game))
 
@@ -79,10 +83,14 @@ async def issue():
 async def info():
     """Displays the version and other info about the bot"""
     e = discord.Embed(type="rich", title=bot.user.name, url="https://github.com/crazybmanp/RyuZU-Bot/",
-                      description="A Discord bot build on modularity via cogs.", color=discord.Color(0xFCEBFC))
-    e.add_field(name="Version", value="?.?.?")
+                      description=bot.config['description'], color=discord.Color(0xFCEBFC))
+    e.add_field(name="Version", value=str(__version__))
     e.add_field(name="Library", value="[discord.py](https://github.com/Rapptz/discord.py)", inline=True)
     e.add_field(name="Github", value="[RyuZU-Bot](https://github.com/crazybmanp/RyuZU-Bot)", inline=True)
     e.add_field(name="Developers", value="crazybmanp#9518, raz#9254", inline=False)
+    Coglist = ""
+    for cogname, cog in sorted(bot.cogs.items()):
+        Coglist += "{} \t({})\n".format(cogname, cog.__version__)
+    e.add_field(name="Loaded Cogs", value=Coglist, inline=False)
 
     await bot.say(embed=e)

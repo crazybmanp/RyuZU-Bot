@@ -5,6 +5,8 @@ from tinydb import Query
 
 from RyuZU.Core import Cog
 
+FileVersion = "0.1"
+
 
 class OWext(Cog):
     server_db = {}
@@ -112,4 +114,4 @@ class OWext(Cog):
 
 
 def setup(bot):
-    bot.add_cog(OWext(bot))
+    bot.add_cog(OWext(bot, FileVersion))

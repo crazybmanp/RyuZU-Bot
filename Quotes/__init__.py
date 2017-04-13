@@ -5,6 +5,8 @@ from tinydb import Query
 
 from RyuZU.Core import Cog
 
+FileVersion = "1.0"
+
 
 class Quotes(Cog):
     server_db = {}
@@ -122,4 +124,4 @@ class Quotes(Cog):
 
 
 def setup(bot):
-    bot.add_cog(Quotes(bot))
+    bot.add_cog(Quotes(bot, FileVersion))

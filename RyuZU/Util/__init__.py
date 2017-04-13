@@ -4,6 +4,8 @@ from discord.ext import commands
 
 from RyuZU.Core import Cog
 
+FileVersion = "1.0"
+
 
 class Util(Cog):
     @commands.command()
@@ -65,4 +67,4 @@ class Util(Cog):
 
 
 def setup(bot):
-    bot.add_cog(Util(bot))
+    bot.add_cog(Util(bot, FileVersion))
