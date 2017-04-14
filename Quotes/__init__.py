@@ -12,9 +12,9 @@ class Quotes(Cog):
     server_db = {}
 
     async def on_ready(self):
-        print('mounting Quote dbs')
+        self.log('mounting Quote dbs')
         for server in self.bot.servers:
-            print("mounting {}'s DB".format(server.name))
+            self.log("mounting {}'s DB".format(server.name))
             self.server_db[server.id] = self.get_cog_db(server.id)
 
     @commands.group(pass_context=True)

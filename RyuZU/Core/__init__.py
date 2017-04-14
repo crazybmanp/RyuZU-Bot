@@ -2,6 +2,8 @@ import json
 from os import makedirs
 from os.path import exists, join
 
+import logging
+
 from discord.ext import commands
 from tinydb import TinyDB
 
@@ -12,6 +14,7 @@ class Bot(commands.Bot):
     def __init__(self, config):
         super().__init__(command_prefix=config['command_string'], description=config['description'])
         self.config = config
+        self.logger = logging.getLogger()
         self.load_cogs()
 
     def load_extension(self, name, core_cog=False):
@@ -39,25 +42,28 @@ class Bot(commands.Bot):
         """Called on initialization. This isn't for dynamic loading/unloading of cogs"""
         core_cogs = ["Admin", "Util"]
 
-        print("Loading core cogs...")
+        self.log("Loading core cogs...")
         for extension in core_cogs:
             try:
                 self.load_extension(extension, core_cog=True)
             except Exception as e:
                 exc = '{}: {}'.format(type(e).__name__, e)
-                print('Failed to load Core Cog: {}, we will now shut down\n{}'.format(extension, exc))
+                self.log('Failed to load Core Cog: {}, we will now shut down\n{}'.format(extension, exc))
                 exit()
 
         ext_cogs = []
-        print("Loading Extension cogs...")
+        self.log("Loading Extension cogs...")
         for extension in self.config['startup_extensions']:
             try:
                 self.load_extension(extension)
                 ext_cogs.append(extension)
             except Exception as e:
                 exc = '{}: {}'.format(type(e).__name__, e)
-                print('Failed to load cog {}\n{}'.format(extension, exc))
-        print("Loaded the following cogs: {}".format(ext_cogs))
+                self.log('Failed to load cog {}\n{}'.format(extension, exc))
+        self.log("Loaded the following cogs: {}".format(ext_cogs))
+
+    def log(self, message, lvl=20):
+        self.logger.log(lvl, message)
 
 
 class Cog:
@@ -75,6 +81,9 @@ class Cog:
                 self.bot.config[self.__class__.__name__] = self.settings
 
             self.bot.update_config()
+
+    def log(self, message, lvl=20):
+        self.bot.log("In cog {}: {}".format(self.__class__.__name__, message), lvl)
 
     def get_cog_db(self, databasename: str):
         """

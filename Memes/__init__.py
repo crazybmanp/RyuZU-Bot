@@ -24,9 +24,9 @@ class Memes(Cog):
     f_server_db = {}
 
     async def on_ready(self):
-        print('mounting Memes dbs')
+        self.log('mounting Memes dbs')
         for server in self.bot.servers:
-            print("mounting {}'s DB".format(server.name))
+            self.log("mounting {}'s DB".format(server.name))
             self.f_server_db[server.id] = self.get_cog_db("respects-{}".format(server.id))
 
     @commands.command()

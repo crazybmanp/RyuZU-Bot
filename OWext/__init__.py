@@ -15,9 +15,9 @@ class OWext(Cog):
     owRegions = ['us', 'eu', 'kr', 'cn', 'jp', 'global']
 
     async def on_ready(self):
-        print('mounting Overwatch dbs')
+        self.log('mounting Overwatch dbs')
         for server in self.bot.servers:
-            print("mounting {}'s DB".format(server.name))
+            self.log("mounting {}'s DB".format(server.name))
             self.server_db[server.id] = self.get_cog_db(server.id)
 
     @commands.command(pass_context=True)

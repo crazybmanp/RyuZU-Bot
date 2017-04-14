@@ -1,6 +1,10 @@
 import json
 
 import discord
+import logging
+
+import sys
+
 from ._version import get_versions
 
 from RyuZU.Core import Bot
@@ -19,15 +23,26 @@ except FileNotFoundError:
 
 bot = Bot(settings)
 
+logging.basicConfig(filename='log.txt', level=logging.INFO)
+logger = logging.getLogger()
+
+
+def exception_handler(type, value, tb):
+    logger.exception("Uncaught exception: {}".format(str(value)))
+
+print(bot.config)
+if 'dev_mode' not in bot.config or not bot.config['dev_mode']:
+    sys.excepthook = exception_handler
+
 
 @bot.event
 async def on_ready():
     await bot.change_presence(game=discord.Game(name="Spooling up..."))
-    print('------')
-    print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
+    bot.log('------')
+    bot.log('Logged in as')
+    bot.log(bot.user.name)
+    bot.log(bot.user.id)
+    bot.log('------')
 
     if 'dev_mode' in bot.config and bot.config['dev_mode']:
         game = "[DevMode] | {}".format(__version__)
@@ -68,7 +83,7 @@ async def shutdown(ctx):
         await bot.say("You must be {0}'s owner to do this.".format(bot.user.name))
         return
     await bot.change_presence(game=discord.Game(name="Shutting down"))
-    print("Shutting down...")
+    bot.log("Shutting down...")
     await bot.logout()
 
 
