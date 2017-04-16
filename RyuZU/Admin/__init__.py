@@ -2,7 +2,7 @@ from discord.ext import commands
 
 from RyuZU.Core import Cog
 
-FileVersion = "1.0"
+FileVersion = "1.1"
 
 
 class Admin(Cog):
@@ -34,6 +34,19 @@ class Admin(Cog):
             await self.bot.say("Only Admins are allowed to purge the chat.")
             return
         await self.bot.say(ctx.message.content[5:])
+
+    @commands.command(pass_context=True)
+    async def saye(self, ctx):
+        """Makes the bot say something (removes your message)"""
+        await self.bot.delete_message(ctx.message)
+        await self.bot.send_typing(ctx.message.channel)
+        if not ctx.message.author.permissions_in(ctx.message.channel).manage_messages:
+            await self.bot.say("You do not have permissions to {} in this channel.".format("manage messages"))
+            return
+        if not ctx.message.author.permissions_in(ctx.message.channel).mention_everyone:
+            await self.bot.say("You do not have permissions to {} in this channel.".format("mention everyone"))
+            return
+        await self.bot.say("{} {}".format("@everyone", ctx.message.content[6:]))
 
     def is_me_or_command(self, m):
         return self.is_me(m) or self.is_command(m)
