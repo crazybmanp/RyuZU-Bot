@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from RyuZU.Core import Cog
 
-FileVersion = "0.1"
+FileVersion = "0.2"
 
 
 def prune_respects(db):
@@ -34,13 +34,16 @@ class Memes(Cog):
         await self.bot.say("THE FUCKIN :fish:BASS:fish: IS FUCKIN **RAW**! https://puu.sh/kPpgM.webm")
 
     @commands.command()
-    async def brainpower(self):
+    async def brainpower(self, vid=None):
         options = [
             "O-oooooooooo AAAAE-A-A-I-A-U- JO-oooooooooooo AAE-O-A-A-U-U-A- E-eee-ee-eee AAAAE-A-E-I-E-A- JO-ooo-oo-oo-oo EEEEO-A-AAA-AAAA",
             "∀∀∀∀-∀∀∀-∀-OƎƎƎƎ oo-oo-oo-ooo-Oſ -∀-Ǝ-I-Ǝ-∀-Ǝ∀∀∀∀ ǝǝǝ-ǝǝ-ǝǝǝ-Ǝ -∀-∩-∩-∀-∀-O-Ǝ∀∀ oooooooooooo-Oſ -∩-∀-I-∀-∀-Ǝ∀∀∀∀ oooooooooo-O",
             "𝓞-𝓸𝓸𝓸𝓸𝓸𝓸𝓸𝓸𝓸𝓸 𝓐𝓐𝓐𝓐𝓔-𝓐-𝓐-𝓘-𝓐-𝓤- 𝓙𝓞-𝓸𝓸𝓸𝓸𝓸𝓸𝓸𝓸𝓸𝓸𝓸𝓸 𝓐𝓐𝓔-𝓞-𝓐-𝓐-𝓤-𝓤-𝓐- 𝓔-𝒆𝒆𝒆-𝒆𝒆-𝒆𝒆𝒆 𝓐𝓐𝓐𝓐𝓔-𝓐-𝓔-𝓘-𝓔-𝓐-𝓙𝓞-𝓸𝓸𝓸-𝓸𝓸-𝓸𝓸-𝓸𝓸 𝓔𝓔𝓔𝓔𝓞-𝓐-𝓐𝓐𝓐-𝓐𝓐𝓐𝓐𝓐𝓐"]
 
-        await self.bot.say("{0} https://www.youtube.com/watch?v=h-mUGj41hWA".format(choice(options)))
+        if vid is None:
+            await self.bot.say("{0} https://www.youtube.com/watch?v=h-mUGj41hWA".format(choice(options)))
+        else:
+            await self.bot.say("{0}".format(choice(options)))
 
     @commands.command(aliases=["neko"])
     async def cat(self):
@@ -72,9 +75,13 @@ class Memes(Cog):
         await self.bot.say("https://www.youtube.com/watch?v=V-fRuoMIfpw")
 
     @commands.command()
-    async def oceanman(self):
-        await self.bot.say(
-            "OCEAN MAN 🌊 😍 Take me by the hand ✋ lead me to the land that you understand 🙌 🌊 OCEAN MAN 🌊 😍 The voyage 🚲 to the corner of the 🌎 globe is a real trip 👌 🌊 OCEAN MAN 🌊 😍 The crust of a tan man 👳 imbibed by the sand 👍 Soaking up the 💦 thirst of the land 💯 https://www.youtube.com/watch?v=6E5m_XtCX3c")
+    async def oceanman(self, vid=None):
+        if vid is None:
+            await self.bot.say(
+                "OCEAN MAN 🌊 😍 Take me by the hand ✋ lead me to the land that you understand 🙌 🌊 OCEAN MAN 🌊 😍 The voyage 🚲 to the corner of the 🌎 globe is a real trip 👌 🌊 OCEAN MAN 🌊 😍 The crust of a tan man 👳 imbibed by the sand 👍 Soaking up the 💦 thirst of the land 💯 https://www.youtube.com/watch?v=6E5m_XtCX3c")
+        else:
+            await self.bot.say(
+                "OCEAN MAN 🌊 😍 Take me by the hand ✋ lead me to the land that you understand 🙌 🌊 OCEAN MAN 🌊 😍 The voyage 🚲 to the corner of the 🌎 globe is a real trip 👌 🌊 OCEAN MAN 🌊 😍 The crust of a tan man 👳 imbibed by the sand 👍 Soaking up the 💦 thirst of the land 💯")
 
     @commands.command(pass_context=True)
     async def reeee(self, ctx):
@@ -82,9 +89,13 @@ class Memes(Cog):
         await self.bot.say("http://i1.kym-cdn.com/entries/icons/original/000/017/830/b49.gif")
 
     @commands.command()
-    async def spaghetti(self):
-        await self.bot.say(
-            "His palms :spaghetti:, knees weak, arms :spaghetti:. There's vomit on his :spaghetti: already; mom's :spaghetti:. He's nervous, but on the surface he looks calm :spaghetti:. To drop :spaghetti:, but he keeps on :spaghetti: what he wrote down, the whole crowd goes :spaghetti:, he opens his mouth, but :spaghetti: won't come out, he's choking, how? Everybody's joking now! The :spaghetti:'s run out, time's up, over - BLAOW! https://www.youtube.com/watch?v=SW-BU6keEUw")
+    async def spaghetti(self, vid=None):
+        if vid is None:
+            await self.bot.say(
+                "His palms :spaghetti:, knees weak, arms :spaghetti:. There's vomit on his :spaghetti: already; mom's :spaghetti:. He's nervous, but on the surface he looks calm :spaghetti:. To drop :spaghetti:, but he keeps on :spaghetti: what he wrote down, the whole crowd goes :spaghetti:, he opens his mouth, but :spaghetti: won't come out, he's choking, how? Everybody's joking now! The :spaghetti:'s run out, time's up, over - BLAOW! https://www.youtube.com/watch?v=SW-BU6keEUw")
+        else:
+            await self.bot.say(
+                "His palms :spaghetti:, knees weak, arms :spaghetti:. There's vomit on his :spaghetti: already; mom's :spaghetti:. He's nervous, but on the surface he looks calm :spaghetti:. To drop :spaghetti:, but he keeps on :spaghetti: what he wrote down, the whole crowd goes :spaghetti:, he opens his mouth, but :spaghetti: won't come out, he's choking, how? Everybody's joking now! The :spaghetti:'s run out, time's up, over - BLAOW!")
 
     @commands.command(pass_context=True, aliases=["f"])
     async def payrespects(self, ctx):
