@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from RyuZU.Core import Cog
 
-FileVersion = "0.2"
+FileVersion = "0.21"
 
 
 def prune_respects(db):
@@ -103,6 +103,15 @@ class Memes(Cog):
         prune_respects(sdb)
         sdb.insert({'timestamp': ctx.message.timestamp.strftime('%b %d %Y %I:%M%p')})
         await self.bot.say("{} people have paid respects today. o7".format(len(sdb)))
+
+    @commands.command(pass_context=True)
+    async def youtried(self, ctx, severity=0):
+        await self.bot.delete_message(ctx.message)
+
+        if severity == 0:
+            await self.bot.say("http://i0.kym-cdn.com/photos/images/facebook/000/325/934/060.png")
+        else:
+            await self.bot.say("https://ih1.redbubble.net/image.13056045.3033/flat,800x800,075,f.jpg")
 
 
 def setup(bot):
