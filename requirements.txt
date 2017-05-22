@@ -1,8 +1,8 @@
-discord.py==0.16.7
-html2text==2016.9.19
-overwatch-api==0.4
+discord.py
+html2text
+overwatch-api
 PyNaCl==1.1.2
-requests==2.13.0
-tinydb==3.2.2
+requests
+tinydb
 versioneer
 youtube-dl
