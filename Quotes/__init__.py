@@ -65,8 +65,19 @@ class Quotes(Cog):
         if not ctx.message.author.permissions_in(ctx.message.channel).manage_messages:
             await self.bot.say("Only Admins are allowed to delete quotes.")
             return
+        try:
+            q = int(quotenum)
+        except ValueError:
+            # Handle the exception
+            await self.bot.say("The quote number must actually be a number.")
+            return
+
         sdb = self.server_db[ctx.message.server.id]
-        sdb.remove(eid=quotenum)
+        try:
+            sdb.remove(eids=[q])
+        except KeyError:
+            await self.bot.say("That key does not exist.")
+            return
         await self.bot.say("Removed quote #{}".format(quotenum))
 
     @quote.command(pass_context=True)
